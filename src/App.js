@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 const COLORS = {
   bg: "#0D0F0E",
@@ -50,7 +50,6 @@ function SyncStatus({ isOnline }) {
 export default function SaaytuAuto() {
   const [tab, setTab] = useState("dashboard");
   const [isOnline, setIsOnline] = useState(true);
-  const [selectedVehicule, setSelectedVehicule] = useState(initialVehicles[0]);
 
   // Simulation de perte de réseau pour la démo
   useEffect(() => {
