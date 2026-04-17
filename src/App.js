@@ -1,15 +1,27 @@
 import { useState, useEffect } from "react";
 
 const COLORS = {
-  bg: "#0D0F0E",
-  surface: "#161A18",
-  card: "#1C211F",
-  border: "#2A3330",
-  accent: "#F5A623", // Jaune industriel
-  green: "#25D366",
-  red: "#FF4545",
-  text: "#E8EDE9",
-  muted: "#7A9085",
+  bg: "#0A0B0B",
+  surface: "#111418", 
+  card: "#1A1D23",
+  border: "#2D3748",
+  accent: "#FF6B35", // Orange moderne
+  success: "#10B981",
+  danger: "#EF4444",
+  warning: "#F59E0B",
+  text: "#F9FAFB",
+  muted: "#9CA3AF",
+  gradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+  gold: "#FFB800",
+  platinum: "#E5E7EB",
+};
+
+const GRADIENTS = {
+  primary: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+  success: "linear-gradient(135deg, #10B981 0%, #059669 100%)",
+  danger: "linear-gradient(135deg, #EF4444 0%, #DC2626 100%)",
+  warning: "linear-gradient(135deg, #F59E0B 0%, #D97706 100%)",
+  gold: "linear-gradient(135deg, #FFB800 0%, #FF9500 100%)",
 };
 
 // Localisation réelle : Axe Thiès - Pout - Sindhia
@@ -25,44 +37,231 @@ const vehicles = [
   { id: "TH-7889-CD", model: "Nissan Navara", owner: "Alassane Ba", km: 67800, score: 91, lastPos: "En route", moving: true },
 ];
 
-// --- COMPOSANTS DE DÉMONSTRATION ---
+// --- COMPOSANTS DE DÉMONSTRATION PROFESSIONNELLE ---
+
+function MetricCard({ title, value, subtitle, gradient, icon, trend }) {
+  return (
+    <div style={{
+      background: COLORS.card,
+      border: `1px solid ${COLORS.border}`,
+      borderRadius: 16,
+      padding: 20,
+      position: "relative",
+      overflow: "hidden",
+      transition: "all 0.3s ease"
+    }}>
+      <div style={{
+        position: "absolute",
+        top: 0,
+        right: 0,
+        width: 100,
+        height: 100,
+        background: gradient,
+        opacity: 0.1,
+        borderRadius: "50%",
+        transform: "translate(30%, -30%)"
+      }} />
+      
+      <div style={{ position: "relative", zIndex: 1 }}>
+        <div style={{ 
+          fontSize: 24, 
+          fontWeight: "bold", 
+          background: gradient,
+          WebkitBackgroundClip: "text",
+          WebkitTextFillColor: "transparent",
+          marginBottom: 8
+        }}>
+          {icon} {value}
+        </div>
+        <div style={{ fontSize: 13, color: COLORS.text, fontWeight: "600", marginBottom: 4 }}>
+          {title}
+        </div>
+        <div style={{ fontSize: 11, color: COLORS.muted }}>
+          {subtitle}
+        </div>
+        {trend && (
+          <div style={{ 
+            marginTop: 8, 
+            fontSize: 10, 
+            color: trend > 0 ? COLORS.success : COLORS.danger,
+            fontWeight: "bold"
+          }}>
+            {trend > 0 ? "+" : ""}{trend}% aujourd'hui
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function LiveChart() {
+  const [data, setData] = useState([65, 78, 90, 81, 95, 88, 92]);
+  
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setData(prev => {
+        const newData = [...prev.slice(1)];
+        newData.push(Math.floor(Math.random() * 30) + 70);
+        return newData;
+      });
+    }, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  return (
+    <div style={{
+      background: COLORS.card,
+      border: `1px solid ${COLORS.border}`,
+      borderRadius: 16,
+      padding: 20,
+      height: 200
+    }}>
+      <div style={{ fontSize: 12, color: COLORS.text, fontWeight: "600", marginBottom: 15 }}>
+        PERFORMANCE TEMPS RÉEL
+      </div>
+      <div style={{ 
+        display: "flex", 
+        alignItems: "flex-end", 
+        height: 120,
+        gap: 8
+      }}>
+        {data.map((value, i) => (
+          <div key={i} style={{ 
+            flex: 1, 
+            background: GRADIENTS.primary,
+            borderRadius: 4,
+            height: `${value}%`,
+            transition: "height 0.5s ease",
+            position: "relative"
+          }}>
+            <div style={{
+              position: "absolute",
+              top: -20,
+              left: "50%",
+              transform: "translateX(-50%)",
+              fontSize: 9,
+              color: COLORS.muted
+            }}>
+              {value}%
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function DemoMode({ active }) {
   const [gains, setGains] = useState(125000);
   const [timeSaved, setTimeSaved] = useState(45);
   const [controls, setControls] = useState(23);
+  const [efficiency, setEfficiency] = useState(87);
 
   useEffect(() => {
     if (!active) return;
     const interval = setInterval(() => {
-      setGains(prev => prev + Math.floor(Math.random() * 5000) + 2000);
-      setTimeSaved(prev => prev + Math.floor(Math.random() * 3) + 1);
+      setGains(prev => prev + Math.floor(Math.random() * 8000) + 3000);
+      setTimeSaved(prev => prev + Math.floor(Math.random() * 5) + 2);
       setControls(prev => prev + 1);
-    }, 3000);
+      setEfficiency(prev => Math.min(99, prev + Math.floor(Math.random() * 3)));
+    }, 2500);
     return () => clearInterval(interval);
   }, [active]);
 
   return (
-    <div style={{ background: `${COLORS.accent}22`, border: `1px solid ${COLORS.accent}`, borderRadius: 12, padding: 15, marginBottom: 20 }}>
-      <div style={{ fontSize: 12, fontWeight: "bold", color: COLORS.accent, marginBottom: 10 }}>MODE DÉMONSTRATION ACTIF</div>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 15 }}>
-        <div>
-          <div style={{ fontSize: 18, fontWeight: "bold", color: COLORS.green }}>+{gains.toLocaleString()} FCFA</div>
-          <div style={{ fontSize: 10, color: COLORS.muted }}>Économisées aujourd'hui</div>
-        </div>
-        <div>
-          <div style={{ fontSize: 18, fontWeight: "bold", color: COLORS.accent }}>{timeSaved} min</div>
-          <div style={{ fontSize: 10, color: COLORS.muted }}>Temps économisé</div>
-        </div>
-        <div>
-          <div style={{ fontSize: 18, fontWeight: "bold", color: COLORS.text }}>{controls}</div>
-          <div style={{ fontSize: 10, color: COLORS.muted }}>Contrôles validés</div>
-        </div>
-        <div>
-          <div style={{ fontSize: 18, fontWeight: "bold", color: COLORS.green }}>0%</div>
-          <div style={{ fontSize: 10, color: COLORS.muted }}>Taux de fraude</div>
+    <div style={{ marginBottom: 25 }}>
+      {/* Header Premium */}
+      <div style={{
+        background: GRADIENTS.primary,
+        borderRadius: 20,
+        padding: 25,
+        marginBottom: 25,
+        position: "relative",
+        overflow: "hidden"
+      }}>
+        <div style={{
+          position: "absolute",
+          top: -50,
+          right: -50,
+          width: 150,
+          height: 150,
+          background: "rgba(255,255,255,0.1)",
+          borderRadius: "50%"
+        }} />
+        
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <div style={{ 
+            display: "flex", 
+            alignItems: "center", 
+            gap: 10,
+            marginBottom: 10
+          }}>
+            <div style={{
+              width: 12,
+              height: 12,
+              background: COLORS.success,
+              borderRadius: "50%",
+              boxShadow: `0 0 20px ${COLORS.success}`,
+              animation: "pulse 2s infinite"
+            }} />
+            <span style={{ 
+              fontSize: 14, 
+              fontWeight: "bold", 
+              color: COLORS.text,
+              letterSpacing: 1
+            }}>
+              SAAYTU-AUTO PRO
+            </span>
+          </div>
+          <div style={{ fontSize: 11, color: "rgba(255,255,255,0.8)" }}>
+            Système de gestion de flotte minier intelligent
+          </div>
         </div>
       </div>
+
+      {/* Metrics Grid */}
+      <div style={{ 
+        display: "grid", 
+        gridTemplateColumns: "1fr 1fr", 
+        gap: 15,
+        marginBottom: 25
+      }}>
+        <MetricCard
+          title="Économies générées"
+          value={`${(gains/1000).toFixed(0)}K FCFA`}
+          subtitle="Aujourd'hui"
+          gradient={GRADIENTS.success}
+          icon=""
+          trend={12}
+        />
+        <MetricCard
+          title="Temps économisé"
+          value={`${timeSaved} min`}
+          subtitle="Par contrôle"
+          gradient={GRADIENTS.warning}
+          icon=""
+          trend={8}
+        />
+        <MetricCard
+          title="Contrôles validés"
+          value={controls}
+          subtitle="Total aujourd'hui"
+          gradient={GRADIENTS.primary}
+          icon=""
+          trend={15}
+        />
+        <MetricCard
+          title="Efficacité système"
+          value={`${efficiency}%`}
+          subtitle="Performance"
+          gradient={GRADIENTS.gold}
+          icon=""
+          trend={5}
+        />
+      </div>
+
+      {/* Live Chart */}
+      <LiveChart />
     </div>
   );
 }
@@ -161,19 +360,83 @@ export default function App() {
   ];
 
   return (
-    <div style={{ fontFamily: "monospace", background: COLORS.bg, minHeight: "100vh", color: COLORS.text, maxWidth: 450, margin: "0 auto" }}>
+    <div style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", background: COLORS.bg, minHeight: "100vh", color: COLORS.text, maxWidth: 480, margin: "0 auto" }}>
       
       {/* Header */}
-      <div style={{ padding: "25px 20px", borderBottom: `1px solid ${COLORS.border}` }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <h1 style={{ color: COLORS.accent, margin: 0, fontSize: 22, letterSpacing: 1 }}>SAAYTU-AUTO</h1>
-            <p style={{ fontSize: 10, color: COLORS.muted, marginTop: 5 }}>CONTROLE FLOTTE : ZONE THIÈS POUT</p>
+      <div style={{
+        background: GRADIENTS.primary,
+        padding: "30px 25px",
+        position: "relative",
+        overflow: "hidden"
+      }}>
+        <div style={{
+          position: "absolute",
+          top: -100,
+          right: -100,
+          width: 200,
+          height: 200,
+          background: "rgba(255,255,255,0.05)",
+          borderRadius: "50%"
+        }} />
+        
+        <div style={{ position: "relative", zIndex: 1 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 15 }}>
+            <div>
+              <h1 style={{ 
+                color: COLORS.text, 
+                margin: 0, 
+                fontSize: 28, 
+                fontWeight: "700",
+                letterSpacing: 2,
+                textShadow: "0 2px 4px rgba(0,0,0,0.3)"
+              }}>
+                SAAYTU-AUTO
+              </h1>
+              <div style={{ 
+                fontSize: 12, 
+                color: "rgba(255,255,255,0.7)", 
+                marginTop: 5,
+                fontWeight: "500"
+              }}>
+                FLEET MANAGEMENT SYSTEM
+              </div>
+            </div>
+            <div style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 8
+            }}>
+              <div style={{
+                width: 10,
+                height: 10,
+                background: COLORS.success,
+                borderRadius: "50%",
+                boxShadow: `0 0 20px ${COLORS.success}`,
+                animation: "pulse 2s infinite"
+              }} />
+              <span style={{
+                fontSize: 10,
+                color: "rgba(255,255,255,0.8)",
+                fontWeight: "600"
+              }}>
+                LIVE
+              </span>
+            </div>
           </div>
-          <div style={{ 
-            width: 8, height: 8, borderRadius: "50%", background: COLORS.green, 
-            boxShadow: `0 0 10px ${COLORS.green}`, animation: "pulse 2s infinite" 
-          }} />
+          
+          <div style={{
+            background: "rgba(255,255,255,0.1)",
+            borderRadius: 12,
+            padding: "12px 16px",
+            backdropFilter: "blur(10px)"
+          }}>
+            <div style={{ fontSize: 11, color: "rgba(255,255,255,0.9)", fontWeight: "600" }}>
+              Zone Minière : Thiès - Pout - Sindhia
+            </div>
+            <div style={{ fontSize: 10, color: "rgba(255,255,255,0.7)", marginTop: 2 }}>
+              3 véhicules actifs | 2 postes de contrôle
+            </div>
+          </div>
         </div>
       </div>
 
