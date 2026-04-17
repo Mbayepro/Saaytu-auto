@@ -253,6 +253,57 @@ export default function App() {
           <div>
             <AlertBanner alerts={alerts} />
             <h3 style={{ fontSize: 12, marginBottom: 15 }}>SIMULATION SCAN QR (POSTE POUT)</h3>
+            
+            {/* QR Code Scanner Visuel */}
+            <div style={{ 
+              background: COLORS.card, 
+              borderRadius: 12, 
+              padding: 20, 
+              marginBottom: 20,
+              textAlign: "center",
+              border: `2px solid ${COLORS.accent}`,
+              position: "relative"
+            }}>
+              <div style={{ 
+                width: 200, 
+                height: 200, 
+                margin: "0 auto", 
+                border: `2px solid ${COLORS.accent}`, 
+                borderRadius: 20, 
+                display: "flex", 
+                alignItems: "center", 
+                justifyContent: "center", 
+                position: "relative",
+                background: "#000"
+              }}>
+                <img 
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=SAAYTU-TH5512B-POUT&color=F5A623&bgcolor=000000`} 
+                  alt="QR Code Saaytu-Auto" 
+                  style={{ borderRadius: 10 }}
+                />
+                <div style={{ 
+                  position: "absolute", 
+                  width: "100%", 
+                  height: 2, 
+                  background: COLORS.accent, 
+                  top: "50%", 
+                  opacity: 0.8,
+                  animation: "scan 2s linear infinite"
+                }} />
+              </div>
+              <p style={{ marginTop: 15, fontSize: 12, color: COLORS.muted }}>
+                Scannez le code QR au poste de Pout
+              </p>
+              <div style={{ 
+                marginTop: 10, 
+                fontSize: 10, 
+                color: COLORS.green,
+                fontWeight: "bold"
+              }}>
+                Véhicule : TH-5512-B | Poste : POUT
+              </div>
+            </div>
+
             <WhatsAppBotSim vehicleId="TH-5512-B" onDone={() => {}} />
           </div>
         )}
@@ -297,7 +348,6 @@ export default function App() {
             ))}
           </div>
         )}
-
       </div>
     </div>
   );
