@@ -297,68 +297,6 @@ function AlertBanner({ alerts }) {
         <div style={{ fontSize: 10, color: COLORS.muted, marginTop: 2 }}>
           {alerts[current].message}
         </div>
-      </div>
-    </div>
-  );
-}
-
-// --- COMPOSANTS DE CONTRÔLE ---
-
-function WhatsAppBotSim({ vehicleId, onDone }) {
-  const [messages, setMessages] = useState([]);
-  const [step, setStep] = useState(0);
-  const questions = [
-    { q: "État des pneus (Poussière/Usure) ?", opts: ["OK", "Critique"] },
-    { q: "Niveau d'huile et liquide ?", opts: ["OK", "Bas"] },
-    { q: "Kilométrage actuel à Pout ?", opts: ["Moins de 15km", "Plus de 15km"] },
-  ];
-
-  useEffect(() => {
-    setMessages([{ from: "bot", text: `CONTRÔLE MINIER\nVéhicule : ${vehicleId}\n\nRépondez pour valider le trajet.` }]);
-  }, [vehicleId]);
-
-  const handleAnswer = (opt) => {
-    setMessages(p => [...p, { from: "user", text: opt }]);
-    if (step + 1 < questions.length) {
-      setStep(step + 1);
-    } else {
-      setMessages(p => [...p, { from: "bot", text: "✅ *Contrôle validé.*\nDonnées transmises au propriétaire." }]);
-      onDone();
-    }
-  };
-
-  return (
-    <div style={{ background: "#0B1419", borderRadius: 12, overflow: "hidden", border: `1px solid ${COLORS.border}`, height: 350, display: "flex", flexDirection: "column" }}>
-      <div style={{ background: "#128C7E", padding: 10, fontSize: 12, fontWeight: "bold", color: "white" }}>🤖 BOT SAAYTU-AUTO</div>
-      <div style={{ flex: 1, padding: 15, overflowY: "auto", display: "flex", flexDirection: "column", gap: 10 }}>
-        {messages.map((m, i) => (
-          <div key={i} style={{ alignSelf: m.from === "user" ? "flex-end" : "flex-start", background: m.from === "user" ? "#005C4B" : "#1F2C34", padding: 10, borderRadius: 8, fontSize: 12 }}>{m.text}</div>
-        ))}
-        {step < questions.length && messages.length > 0 && !messages.find(m => m.text.includes("✅")) && (
-          <div style={{ marginTop: 10, fontSize: 12, color: COLORS.accent }}>{questions[step].q}</div>
-        )}
-      </div>
-      {step < questions.length && !messages.find(m => m.text.includes("✅")) && (
-        <div style={{ padding: 10, display: "flex", gap: 10, background: "#0B1419" }}>
-          {questions[step].opts.map((o, i) => (
-            <button key={i} onClick={() => handleAnswer(o)} style={{ flex: 1, background: COLORS.accent, border: "none", padding: 8, borderRadius: 5, fontWeight: "bold", cursor: "pointer" }}>{o}</button>
-          ))}
-        </div>
-      )}
-    </div>
-  );
-}
-
-export default function App() {
-  const [activeTab, setActiveTab] = useState("demo");
-
-  const alerts = [
-    { type: "warning", title: "Maintenance requise", message: "Véhicule DK-2024-AS nécessite une révision" },
-    { type: "alert", title: "Contrôle en cours", message: "TH-5512-B en approche du poste Pout" },
-    { type: "warning", title: "Nouveau véhicule ajouté", message: "TH-7889-CD intégré à la flotte" },
-    { type: "alert", title: "Contrôle validé", message: "TH-5512-B passé au poste avec succès" },
-  ];
-
   return (
     <div style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", background: COLORS.bg, minHeight: "100vh", color: COLORS.text, maxWidth: 480, margin: "0 auto" }}>
       
