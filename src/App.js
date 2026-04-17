@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 
 const COLORS = {
   bg: "#0D0F0E",
@@ -115,8 +115,8 @@ function WhatsAppBotSim({ vehicleId, onDone }) {
   ];
 
   useEffect(() => {
-    setMessages([{ from: "bot", text: `🔧 *CONTRÔLE MINIER*\nVéhicule : *${vehicleId}*\n\nRépondez pour valider le trajet.` }]);
-  }, []);
+    setMessages([{ from: "bot", text: `CONTRÔLE MINIER\nVéhicule : ${vehicleId}\n\nRépondez pour valider le trajet.` }]);
+  }, [vehicleId]);
 
   const handleAnswer = (opt) => {
     setMessages(p => [...p, { from: "user", text: opt }]);
@@ -152,7 +152,6 @@ function WhatsAppBotSim({ vehicleId, onDone }) {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("demo");
-  const [demoMode, setDemoMode] = useState(true);
 
   const alerts = [
     { type: "warning", title: "Maintenance requise", message: "Véhicule DK-2024-AS nécessite une révision" },
@@ -207,7 +206,7 @@ export default function App() {
         {/* Mode Démonstration */}
         {activeTab === "demo" && (
           <div>
-            <DemoMode active={demoMode} />
+            <DemoMode active={true} />
             <AlertBanner alerts={alerts} />
             
             <div style={{ background: COLORS.card, borderRadius: 12, padding: 15, marginBottom: 20 }}>
