@@ -280,8 +280,8 @@ function AlertBanner({ alerts }) {
 
   return (
     <div style={{ 
-      background: alerts[current].type === "warning" ? `${COLORS.accent}22` : `${COLORS.red}22`,
-      border: `1px solid ${alerts[current].type === "warning" ? COLORS.accent : COLORS.red}`,
+      background: alerts[current].type === "warning" ? `${COLORS.accent}22` : `${COLORS.danger}22`,
+      border: `1px solid ${alerts[current].type === "warning" ? COLORS.accent : COLORS.danger}`,
       borderRadius: 8, 
       padding: 12, 
       marginBottom: 15,
@@ -289,14 +289,20 @@ function AlertBanner({ alerts }) {
       alignItems: "center",
       gap: 10
     }}>
-      <div style={{ fontSize: 16 }}>{alerts[current].type === "warning" ? "warning" : "alert"}</div>
+      <div style={{ fontSize: 16 }}>{alerts[current].type === "warning" ? "" : ""}</div>
       <div style={{ flex: 1 }}>
-        <div style={{ fontSize: 11, fontWeight: "bold", color: alerts[current].type === "warning" ? COLORS.accent : COLORS.red }}>
+        <div style={{ fontSize: 11, fontWeight: "bold", color: alerts[current].type === "warning" ? COLORS.accent : COLORS.danger }}>
           {alerts[current].title}
         </div>
         <div style={{ fontSize: 10, color: COLORS.muted, marginTop: 2 }}>
           {alerts[current].message}
         </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
   return (
     <div style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", background: COLORS.bg, minHeight: "100vh", color: COLORS.text, maxWidth: 480, margin: "0 auto" }}>
       
