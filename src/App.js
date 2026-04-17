@@ -302,7 +302,7 @@ function AlertBanner({ alerts }) {
   );
 }
 
-function App() {
+export default function App() {
   return (
     <div style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif", background: COLORS.bg, minHeight: "100vh", color: COLORS.text, maxWidth: 480, margin: "0 auto" }}>
       
